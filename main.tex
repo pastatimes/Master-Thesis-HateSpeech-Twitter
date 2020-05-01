@@ -1,0 +1,243 @@
+\documentclass[a4paper,pdf]{article} % gebruik acm style voor je scriptie: [sigconf, format=acmsmall, screen=true, review=false]{acmart} 
+
+ 
+\usepackage{hyperref}
+\usepackage{pdfpages} % http://mirror.unl.edu/ctan/macros/latex/contrib/pdfpages/pdfpages.pdf
+\usepackage{booktabs} 
+
+\usepackage{lineno}
+\linenumbers  
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes} % handig voor commentaar: gebruik \todo{}, zie ftp://ftp.fu-berlin.de/tex/CTAN/macros/latex/contrib/todonotes/todonotes.pdf
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{tcolorbox}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{pgfgantt}
+
+% when writing in Dutch
+%\usepackage[dutch]{babel}
+%\selectlanguage{dutch}
+
+\begin{document}
+
+\title{A comparison of Trump's tweeting style with respect to the use of hate speech during his presidency} % your title
+\author{Kimberley van Ruiven}
+
+\maketitle
+
+%\todototoc
+%\listoftodos
+%\tableofcontents
+
+\begin{abstract}Research has shown that hate speech expressed by Trump directed at marginalised groups such as ethnic minorities and immigrants can have harmful consequences for them. His rhetoric shows similarities with cyberbullying, a field that has been researched but also has been proven hard to measure. In contradiction to hate speech cyberbullying is often aimed at individuals, but the effects as just as detrimental, or even worse - with in some cases suicide as result. In this thesis an attempt is made to detect hate speech in Trump's tweets and speeches in order to compare the topics discussed in them by means of supervised-learning techniques. Three machine-learning algorithms are used, Random Forest (RF), Support Vector Classifier (SVC) and Logistic Regression (LR). 
+
+\end{abstract}
+
+\section{Personal details}
+
+\begin{description}
+ \item[My email:] \url{ kimberley.vanruiven@uva.nl }
+ \item[My supervisors email:] \url{r.gopalakrishnapillai@uva.nl }
+ \item[The wiki on my github account] \url{}
+ \end{description} 
+
+\section{Introduction}
+
+
+'When Mexico sends its people, they’re not sending their best. They’re sending people that have lots of problems… They’re bringing drugs. They’re bringing crime. They’re rapists. And some, I assume, are good people.' \footnote{https://www.washingtonpost.com/politics/2019/10/02/trumps-most-insulting-violent-language-is-often-reserved-immigrants/} \\ 
+
+This comment, that aims to put Mexican immigrants in a negative light, is characteristic for the way Donald Trump conducted his campaign during the 2016 presidential elections. According to Brooking (2019) the Trump campaign was driven by 'anti-immigrant sentiment, racism and xenophobia' \footnote{https://www.brookings.edu/blog/fixgov/2019/08/14/trump-and-racism-what-do-the-data-say/}. 
+
+In addition to the manual analysis of a campaign, machine-learning methods are another way for measuring the level of negativity used in a text. Sentiment analysis is an example of such a method. This is a field in natural language processing (NLP) that 'studies people's opinions, sentiments or emotions toward entities or events and their subjective attitudes expressed in text' (Liu, 2015). This means that data can be classified according to expressed emotions, varying from \emph{negative} and \emph{positive} to \emph{neutral}  \footnote{https://monkeylearn.com/sentiment-analysis/}. This is an example of a model that focuses on polarity to measure a speakers' opinion on a certain topic. Other types of sentiment analysis can focus on detecting feelings and emotions or even intentions \footnote{https://monkeylearn.com/sentiment-analysis/}.
+
+Liu \& LeiLei (2018) did a sentiment analysis that focused on the polarity of the expressed emotions in the speeches of Trump and Clinton during the elections. They compared the rhetoric and discourse strategies both candidates used. They found that, despite the negative sentiment in both campaigns, Trump uses a significantly higher amount of negative words than Clinton. Linguistic research furthermore shows that Trump heavily relies on emotion, rather than on 'logical and factual coherence' (Scalafani, 2018). These findings confirm the conclusion of linguist Lakoff (2017) who describes the communication style and discourse of Trump an 'appeal to emotion and personal belief'. \\
+
+The appeal to emotion is a rhetorical figure called \emph{pathos} that derives from linguistics. Pathos aims to persuade a public of a certain viewpoint by expressing negative or positive emotions with the goal of manipulating their opinions (Varpio, 2018). Other ways to manipulate an audience are by means of \emph{ethos}, which focuses on the credibility and trustworthiness of the speaker or writer and \emph{logos}. The latter focuses on the argument that is being presented by the writer and 'refers to the clarity and logical integrity of the argument' (Varpio, 2018). \\
+
+In line with the use of pathos, \emph{hate speech} can be used to express offensive beliefs. In this case, negative ideas directed towards disadvantaged social groups with the intention of causing harm (Davidson et al., 2017). It is closely related to cyberbullying, however the main difference is that bullying is directed towards an individual instead of a group (Malmasi \& Zampieri, 2018). There are many definitions of hate speech, but for this thesis the definition of Gomez et al. (2018) will be followed: \\
+
+'Any emotional expression imparting opinions or
+ideas – bringing a subjective opinion or idea to an
+external audience- with discriminatory purposes. It
+can take many forms: written, non-verbal, visual,
+artistic, and may be disseminated through any media,
+including internet, print, radio, or television'. \\
+
+A way to detect hate speech is by means of building Machine Learning models for hate speech classification (Gomez et al., 2018). An example of such a model can be found in a study of Malmasi \& Zampieri (2017). They created lexical baselines for classification among three categories: HATE, OFFENSIVE and OK, that had a 78\% accuracy in identifying hate speech. Their approach was found on character N-Grams, word N-Grams and linear SVM to execute multi-class classification. Their results show that the main problem can be found in being able to distinguish profanity from hate speech. 
+
+% Anonymity, invisibility, community, instantaneousness and harm are aspects of the Internet that enable and reinforce hate speech (Brown, 2017). Kahn (2017) relates hate speech to American politics and specifically to the politics of Trump. He makes a distinction between European hate speech in countries such as the Netherlands and American hate speech. He thereby poses the question whether freedom of speech should be restricted in developed nations, as is the case in Germany and France. 
+
+%2. A clearly defined research problem and corresponding subquestions **(20)**
+%	* Can the problem be answered?
+%	* Do answers to the subquestions indeed help in an understanding of the research problem or even in solving the research problem?
+%	* Are the subquestions detailed enough?
+% For a president with a vast share of 72,7 million Twitter followers in 2020 \footnote{https://twitter.com/realdonaldtrump?lang=nl}, compared to 11,9 million followers in 2016 \footnote{https://www.statista.com/statistics/509579/twitter-followers-of-2016-us-presidential-candidates/}, this seems a relevant question. \\ 
+
+% With regards to Trump his online presence, qualitative research has been done about his style of tweeting by Enli (2017), Ott (2017) and Kreis (2017). The latter did a study about the communication style of Trump on Twitter during the 2016 elections. Kreis specifically focuses on his tweets on a language-level by analyzing his tweets manually. Enli focuses on the difference of the social media campaigns of Trump and Clinton and Ott executes a manual analysis of Donald Trump his Twitter feed. 
+
+In addition to existing research, this thesis will compare the negative emotions expressed by Trump in his tweets to his speeches during the 2016 presidential elections by means of a sentiment analysis that focuses on emotion detection and in particular hate speech aimed at immigrants. In that way this research aims to fill a gap in the existing literature. 
+
+Gomez et al. (2018) underline the importance of developing methods for hate speech detection due to the lack of current resources for detecting hate speech despite its widespread use. They also point out the harm it can cause to individuals that reaches beyond the Internet. Murali (2017) states that online harassment or cyber bullying can cause serious health issues for the victims, who often tend to express suicidal behavior. \\
+
+% Liu \& Lei Lei describe that there have no studies been done yet about the rhetoric of the tweets of Trump in relation to his victory by means of sentiment analysis. The relevance of this thesis therefore lies mainly in the fact that no computational methods have been used before to compare texts from tweets to texts from speeches of a US presidential candidate in order to determine/measure the level of negativity (or aggressiveness) of his or her campaign. The outcome of this research could be relevant both in the field of linguistics and computation, as the combination of  machine-learning methods and linguistic classifications has not been used before in order to compare these modalities of communication. 
+
+
+% The fact that Twitter was the main modality of communication for Trump in 2016 (Ott, 2018) in combination with the size and intensity with which Twitter is being used in general as a tool for influencing the public during and outside of presidential elections also support the need of further research. 
+
+As stated before, previous research by Liu \& Lei Lei (2018) and Kahn (2017) has shown that Trump uses more negative sentiments and hate speech compared to Clinton. This thesis builds on these findings with the goal of gaining new insights into the negative sentiments that Trump expresses in his tweets and his speeches by measuring and comparing them. The research question of this thesis therefore is:\\
+
+\emph{How does the hate speech in Trumps his tweets compare to the hate speech in his speeches during the 2016 presidential elections according to machine-learning methods (SVM, LR, Random Forest and an ensemble of these)?}\\
+
+In order to answer the main question, several sub-questions are formulated: \\
+
+\emph{Which scope is best suitable with respect to the definition of hate speech in tweets and speeches of Trump during the US presidential elections of 2016?}
+
+\emph{Which features of a sentence (including linguistic structure) in tweets and speeches are helpful in identifying the sentence  as hate speech?}
+
+\emph{How can a labelled dataset from tweets and speeches be generated that could be used in training the classifiers to perform supervised hate speech detection?}
+
+\emph{How do Logistic Regression (LR), Support Vector Machine (SVM) and Random Forest (RF) perform on a dataset for hate speech detection in tweets and speeches (with precision and F1 score as relevant metrics)?}
+
+\emph{How do topics in tweets of Trump with respect to hate speech differ from topics in his speeches?}
+
+ \section{Related work}
+% Overview of the state of the art of the literature **(20)**
+%	* One expects that the research problem is grounded in the literature and that each subquestion or field has a small section of relevant literature.
+%	* All parts of the thesis should be grounded in or at least connected to  the literature.
+ 
+For this thesis proposal a literature study was conducted. This research will focus on the negative sentiments directed towards immigrants that Trump expresses during the 2016 presidential elections. The goal of this research is to find similarities and differences in the negative emotions he expresses in his speeches and his tweets. The following paragraphs will provide a background for this thesis of what there already has been done with regards to Trump's rhetoric and hate speech detection.\\
+
+\textbf{The social media presence of Trump}\\
+
+Meyrowitz (1994) states that every medium has specific features that determine how users process information and make sense of the world. Twitter, which is a micro-blogging platform, enables users to send and receive tweets of no more than 280 characters (Ott, 2017). Ott furthermore explains that Twitter requires simplicity, encourages impulsivity and supports incivility. He therefore concludes that this makes Twitter the perfect breeding ground for hate speech and negativity.
+
+Negativity can especially be found in the sentiments expressed in Trump's tweets (Liu\&LeiLei, 2018). What distinguishes him from other presidential candidates besides his negativity, is his frequent use of Twitter as a mode of communication for all messages (Brookey \& Ott, 2018; Enli, 2017; Kreis, 2017; Ott, 2017). This in contradiction to Clinton who uses Twitter solely as a professional means of communication (Enli, 2017). Enli states that Trump thereby has a 'more authentic and non-traditional style' in contrast to Clinton, who sticks to a 'traditional tweeting style'. This means that Clinton makes use of the formal conventions of language and political expressions where Trump uses Twitter in an informal way, for example to critique the mainstream media as biased and untrustworthy (Enli, 2017). In addition to this, Kreis (2017) explains that Trump has an 'informal, direct, and provoking communication style' whereby he makes use of concepts as the 'negative other'. This "other" Trump relates to inevitable dangers. An example is when he refers to Mexican immigrants as "the other" and thereby proposes to build a wall. Besides Mexican immigrants, woman and the disabled are often the target of Trump's questionable comments (Kreis, 2017).  
+
+Another example of harm can be seen in the consequences of the election of Donald Trump as President of the United States. The Washington Post (2019) did a research on the correlation between the counties that hosted one of Trump's campaign rallies in 2016, Trump's political rhetoric and increased incidents of hate crimes. They found that counties who hosted a Trump campaign rally had an increase of 226 percent in reported hate crimes over counties that did not host such a rally \footnote{https://www.washingtonpost.com/politics/2019/03/22/trumps-rhetoric-does-inspire-more-hate-crimes/}.
+
+The research of Edwards and Rushin (2018) had similar findings. They did a study on the outcome of the 2016 presidential elections and a reported rise in hate crimes across the United States. They state that Trump's rhetoric in combination with his election as President of America encouraged the increase of hate crime. These findings support the urgency for developing methods to combat hate speech and - to a lesser extend - cyber bullying.\\
+\break \\
+\textbf{Trump's negative sentiments towards immigrants}\\
+
+% Ott (2018) explains that Trump follows the notion of post-truth politics. This means that he mainly aims to influence the public by changing their emotional state with his viewpoints, rather than by using hard facts. Trump states his opinions on Twitter as if they are facts (Ott, 2018; Lakoff, 2017). According to Ott this leads to a time, which he refers to as the Age of Twitter, where the truth comes second. 
+
+During the 2016 presidential elections, Trump made use of an 'Anti-Political Rhetorical Strategy' (Kayam, 2018). He presented himself as an 'anti-politician' by using 'simple, low readability-level language'. He used short sentences and hyperbole, a form of language exaggeration that can be positive or negative. Even though Trump claims that he makes use of a 'truthful hyperbole', his language often still exceeds the facts. The use of hyperbole can also reinforce the rhetorical figure pathos. Claridge (2011) states that 'hyperbole can make things more important, more frightening or more desirable, thus arousing specific attitudes and feelings'. 
+
+The arousing of specific feelings is precisely what Trump does in his 2016 campaign by using a political rhetoric that was fuelled by 'racism, sexism and xenophobia' \footnote{https://www.brookings.edu/blog/fixgov/2019/08/14/trump-and-racism-what-do-the-data-say/}. Schaffer, Mac Williams \& Nteta (2018) state that it were these feelings of racist and sexist resentment that resonated among a group of 'non-educated whites'. They found that positive attitudes toward these beliefs were stronger associated with a Trump vote than economic motifs. Hooghe \& Dassoneville (2018) found similar results in their study. They state that negative opinions toward ethnic minorities and immigrants were more important for Trump support than a 'lack of trust in politics' or 'low levels of satisfaction for democracy', which were factors of protest voting against the political elite. Lastly, Scott (2019) states in the New York Times that the negative sentiment Trump expresses is mainly directed at immigrants. Not only does he portray them as criminals and violent, he also hints at using violence as a solution to the problem of illegal immigration \footnote{https://www.washingtonpost.com/politics/2019/10/02/trumps-most-insulting-violent-language-is-often-reserved-immigrants/}.\\
+
+\textbf{Existing methods with respect to hate speech}\\
+
+In the field of hate speech detection, relevant research has been done by several researchers. Schmidt \& Wiegandt (2017) did a study on methods for hate speech detection on social media. They found that character-level approaches work better than token-level approaches and that lexicon resources might work well in combination with other methods. Kumar et al. (2018) and Samghabadi et al. (2018) did studies on TRAC 2018 Shared Task on Agression Identification for social media texts that followed a three-way classification system: Overtly Aggressive, Covertly Agressive and Non-agressive. Kumar et al's. (2018) study shows that the model works better on English (Facebook) than English (Social media) and that other models, such as SVM or Ensemble model should be tested for classification. Samghabadi et al. (2018) furthermore made use of a fine-grained sentiment analysis for every message in the comment. They state that the best performing systems use a combination of lexical and semantic features for the English corpus they used.
+
+Malmasi \& Zampieri (2017) did a research on methods to detect hate speech on social media. Thereby they made a distinction between hate speech and profanity. The dataset they used consisted of tweets they annotated with the categories 'HATE', 'OFFENSIVE' and 'OK'. They also applied standard lexical features and a linear SVM classifier as a starting point for their study. Their results show that a character 4-gram model gave the best results, but that discriminating hate speech from profanity remains a difficult task. In 2018 they conducted the same research but with a different dataset. Malmasi \& Zampieri make use of N-grams, skip grams and clustering-based word representations. They conclude again that discriminating hate speech from profanity is very hard and that the standard features they applied might not be enough for telling them apart with high certainty.
+
+Gomez' research (2018) is partly build on the findings of Malmasi \& Zampieri. They use NLP techniques and emotion analysis for hate speech classification. In their study they apply a combination of lexicon-based and machine learning approaches to forecast hate speech in a text by means of a sentiment analysis that focused on detecting feelings. They conclude that the inclusion of emotions into the model improved the certainty on hate speech detection.\\
+
+% Sentiment Analysis emotion classification methods\\
+
+% With regards to sentiment analysis and political tweets, relevant work has been done by Bhattacharya et al. (2010), Murthy et al. (2015) and Liu \& Lei Lei (2018). 
+
+% Bhattacharya et al. focus on the public opinion of the 2012 US elections on Twitter. They assess statements of opinions related to the personality traits of politicians. They used Amazon Mechanical Turk for the annotation of \emph{positive}, \emph{negative} and \emph{neutral} personality traits of presidential candidates. Twitter data was collected with Twitter Search API by using keywords. Even though the topic differs from the subject of analysis in this thesis, there are similarities in the domain that is being examined. Therefore, the methods that are used can be relevant for the analysis of the Tweets in this thesis.
+
+% Liu \& Lei Lei focus on the speeches of Trump and Clinton by means of sentiment analysis. They compare speech themes of Clinton and Trump with the rhetoric strategies used in their speeches. The data was collected through the UC Santa Barbara's (2017) "The Presidency Project" website. They execute "a sentence-level lexicon-based sentiment analysis". Thereby they make use of a program in R called \emph{syuzhet} (Jockers, 2017). They furthermore use two different lexicons, Jockers'(2017b) and Liu at al.'s (2005) sentiment lexicon to make the outcome of their findings more trustworthy. These methods are relevant, because they can be applied to the topic of this thesis as well.\\
+
+\section{Methodology}
+%Methodology **(20)**
+%	5. Do I get a clear picture of the used resources?
+%		5. E.g., for data, do I get a clear picture of the data, its state, its availability, how much it is, how dirty, how much work to process, etc, etc.
+%	6. Are the methods which will be used described in enough detail, so that I can picture what will be done exactly? 
+%	7. Is the evaluation appropriate? That is, do I understand how each subquestion is answered by the evaluation? 
+
+\textbf{4.1 Data Gathering \& Preprocessing}\\
+\break
+For the purpose of this research a hate speech lexicon containing hate speech will be used: Hatebase.org. With the Twitter API there can be searched for tweets and speeches that contain terms from the lexicon. In this manner, a timeline can be constructed with tweets that belong to Trump in the period July 2016 to November 2016. The words that are retrieved from this corpus contain terms from this lexicon. These words will be labelled as hate speech. \\
+\break
+\textbf{4.1.1 Preprocessing steps}\\
+\textsc{4.1.1a Tokenization}\\
+\textsc{4.1.1b Stop word removal}\\
+\textsc{4.1.1c Stemming}\\
+\textsc{4.1.1d Annotation}\\
+\break
+\textbf{4.2 Features of a sentence}\\
+\textsc{4.2a TF-IDF}\\
+\textsc{4.2b Bag-of-Words}\\
+\break
+\textbf{4.3 Classification Algorithms}\\
+All models could be performed with sci-kit. \\
+\textsc{4.3a Logistic regression}\\
+\textsc{4.3b Support Vector Machine}\\
+\textsc{4.3c Random Forest}\\
+\break
+\textbf{4.4 Results}
+
+\section{Risk assessment}
+%Risk assessment **(10)**
+%	* Is it complete? Is is realistic? Is the backup plan executable?
+Possible scenario's of what could go wrong, are: \\
+\break
+- The algorithms for detecting hate speech are biased (e.g. racial bias), as humans decide what is hate speech and what is not. This might reduce the accuracy of the models when the topic would be 'immigrants'. According to Davidson et al. (2019) this could result in "unfairly penalizing the victim due to mistakenly considering the speech by this minority group as abusive, but failing to identify abuse against them will leave [us] unable to take action against the perpetrator".\\
+- Apart from bias, hate speech in general is hard to define and different people have different ideas about what hate is and what is not. Therefore the results can be bad due to wrong labelling of the dataset. Stating clear rules is important.
+\break
+- Another reason for bad results could be that the model itself might be broken.\\
+\break
+\textbf{Plan B}\\
+The backup plan would be to do a topic analysis that classifies topics, instead of focusing on hate speech. In this case, a different dataset could be used.
+	
+\section{Project plan}
+%Project plan  **(20)**
+%	* Is it complete? (I.e., every part of the work covered.)
+%	* Is it realistic?
+%	* Does it give a clear picture of what will be done when? 
+%	* Is it possible to evaluate whether the student is on schedule at any point in time?
+
+\begin{center}
+\begin{tabular}{ | m{8em} | m{10cm}| } 
+  \hline
+  \textbf{Period} & \textbf{Task} \\ 
+  \hline
+  April 1 - April 5 &  Data Gathering: Speeches of Trump from the US presidential elections of 2016 (speech text scraped from American Presidency Website)\\ 
+  \hline
+  April 5 - April 12 &  Data Gathering: Tweets of Trump from the US presidential elections of 2016 (dependent on the dataset)\\ 
+  \hline
+  April 12 - April 19 &  Data Preparation: Annotation of the dataset \\
+  \hline
+  April 19 - April 26 & Data Preparation: Annotation of the dataset\\ 
+  \hline
+  April 26 - May 3 & Preprocessing data: tokenization, part-of-speech-tagging, parsing, lemmatization, stop-word removal, URLS and symbols removal, spell correction, stemming and feature extraction (e.g. Bag of Words)\\ 
+  \hline
+  May 3 - May 10 & Preprocessing data \\ 
+  \hline
+  May 10 - May 17  & Model implementation: text classification according to machine-learning algorithms (SVM, LR, Random Forest and an ensemble of these) with precision and F1-score as relevant metrics OR sentiment analysis OR topic analysis \\ 
+  \hline
+  May 17 - May 24  & Model implementation \\ 
+  \hline
+  May 24 - May 31  & Visualization and comparison of the results \\ 
+  \hline
+  May 31 - June 7  & Visualization and comparison of the results \\ 
+  \hline
+  June 7 - June 14  & Writing thesis full-time \\ 
+  \hline
+  June 14 - June 21  & Writing thesis full-time \\ 
+  \hline
+  June 21 - June 28  & Thesis Defense \\ 
+  \hline
+\end{tabular}
+\end{center}
+
+% your refs
+
+\bibliographystyle{plain}
+\bibliography{MyThesis}
+
+ 
+\end{document}
+
+
+
